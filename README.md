@@ -3,7 +3,7 @@
 Este projeto é uma API REST desenvolvida em Java com Spring Boot para processamento de transações financeiras e gestão de saldos, consumindo mensagens de uma fila SQS que foi
 dada no teste.
 
-Aplique no projeto foco em **concorrência**, **integridade de dados** e **performance**, aproximando o que consegui de um cenário bancário.
+No projeto foco em **concorrência**, **integridade de dados** e **performance**, aproximando o que consegui de um cenário bancário.
 
 ---
 
