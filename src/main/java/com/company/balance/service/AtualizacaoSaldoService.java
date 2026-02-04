@@ -9,8 +9,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+
+import static java.time.ZoneOffset.UTC;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +37,11 @@ public class AtualizacaoSaldoService {
                 .buscarPorIdComLock(idConta)
                 .orElseGet(() -> criarConta(mensagem));
 
+        OffsetDateTime dataTransacao = converterTimestamp(mensagem.getTransacao().getTimestamp());
+
         conta.atualizarSaldo(
                 mensagem.getConta().getSaldo().getValor(),
-                mensagem.getTransacao().getTimestamp()
+                dataTransacao
         );
 
         contaRepository.save(conta);
@@ -56,7 +61,14 @@ public class AtualizacaoSaldoService {
         conta.setTitular(mensagem.getConta().getTitular());
         conta.setSaldo(mensagem.getConta().getSaldo().getValor());
         conta.setMoeda(mensagem.getConta().getSaldo().getMoeda());
-        conta.setUltimaAtualizacao(mensagem.getTransacao().getTimestamp());
+        conta.setUltimaAtualizacao(converterTimestamp(mensagem.getTransacao().getTimestamp()));
         return conta;
+    }
+
+    private OffsetDateTime converterTimestamp(Long timestampMicros) {
+        if (timestampMicros == null) return OffsetDateTime.now();
+        long seconds = timestampMicros / 1_000_000;
+        long nanos = (timestampMicros % 1_000_000) * 1_000;
+        return Instant.ofEpochSecond(seconds, nanos).atOffset(UTC);
     }
 }

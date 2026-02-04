@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface ContaRepository extends JpaRepository<ContaEntity, UUID> {
 
-    @Lock(LockModeType.OPTIMISTIC)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from ContaEntity c where c.id = :id")
     Optional<ContaEntity> buscarPorIdComLock(UUID id);
 }

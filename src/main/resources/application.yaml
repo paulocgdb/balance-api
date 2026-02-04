@@ -1,3 +1,36 @@
 spring:
   application:
     name: balance-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/balance
+    username: balance
+    password: balance
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql
+
+  cloud:
+    aws:
+      region:
+        static: sa-east-1
+      credentials:
+        access-key: test
+        secret-key: test
+      sqs:
+        endpoint: http://localhost:4566
+        listener:
+          max-concurrent-messages: 10
+          max-messages-per-poll: 10

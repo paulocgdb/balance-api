@@ -1,17 +1,28 @@
 package com.company.balance.dto;
 
+import com.company.balance.enums.Moeda;
+import com.company.balance.enums.StatusTransacao;
+import com.company.balance.enums.TipoTransacao;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
 public class TransacaoDTO {
     private UUID id;
-    private String tipo;
+    
+    @JsonProperty("type")
+    private TipoTransacao tipo;
+    
+    @JsonProperty("amount")
     private BigDecimal valor;
-    private String moeda;
-    private String status;
-    private OffsetDateTime timestamp;
+    
+    @JsonProperty("currency")
+    private Moeda moeda;
+    
+    private StatusTransacao status;
+    
+    private Long timestamp;
 }

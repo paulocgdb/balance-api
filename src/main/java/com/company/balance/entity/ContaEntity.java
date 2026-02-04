@@ -1,7 +1,10 @@
 package com.company.balance.entity;
 
+import com.company.balance.enums.Moeda;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
@@ -30,7 +33,8 @@ public class ContaEntity {
     private BigDecimal saldo;
 
     @Column(nullable = false, length = 3)
-    private String moeda;
+    @Enumerated(EnumType.STRING)
+    private Moeda moeda;
 
     @Column(name = "ultima_atualizacao", nullable = false)
     private OffsetDateTime ultimaAtualizacao;
