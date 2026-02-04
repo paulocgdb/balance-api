@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "contas")
 @Getter
+@Setter
 @NoArgsConstructor
 public class ContaEntity {
 
