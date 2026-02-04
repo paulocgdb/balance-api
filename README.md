@@ -35,7 +35,7 @@ Aplique no projeto foco em **concorrência**, **integridade de dados** e **perfo
 
 1. **Clonar o Repositório**
    ```bash
-   git clone <url-do-repositorio>
+   git clone https://github.com/paulocgdb/balance-api.git
    cd balance-api
    ```
 
