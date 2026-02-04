@@ -17,11 +17,15 @@ public class TransacaoSqsListener {
 
     @SqsListener("transacoes-financeiras-processadas")
     public void receber(MensagemTransacaoSqsDTO mensagem) {
+        log.info("Recebida transação [{}] para conta [{}]", 
+                mensagem.getTransacao().getId(), mensagem.getConta().getId());
         try {
             atualizacaoSaldoService.processar(mensagem);
+            log.info("Transação [{}] processada com sucesso.", mensagem.getTransacao().getId());
         } catch (DataIntegrityViolationException e) {
             log.warn("Concorrência detectada ao processar transação (Conta ou Transação já existente). Retentando... Erro: {}", e.getMessage());
             atualizacaoSaldoService.processar(mensagem);
+            log.info("Transação [{}] processada com sucesso após retry.", mensagem.getTransacao().getId());
         }
     }
 }

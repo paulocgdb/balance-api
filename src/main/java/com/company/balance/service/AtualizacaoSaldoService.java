@@ -7,6 +7,7 @@ import com.company.balance.repository.ContaRepository;
 import com.company.balance.repository.TransacaoProcessadaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 import static java.time.ZoneOffset.UTC;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AtualizacaoSaldoService {
@@ -28,6 +30,7 @@ public class AtualizacaoSaldoService {
         UUID idTransacao = mensagem.getTransacao().getId();
 
         if (transacaoProcessadaRepository.existsById(idTransacao)) {
+            log.info("Transação [{}] ignorada (Idempotência: já processada).", idTransacao);
             return;
         }
 
@@ -35,9 +38,18 @@ public class AtualizacaoSaldoService {
 
         ContaEntity conta = contaRepository
                 .buscarPorIdComLock(idConta)
-                .orElseGet(() -> criarConta(mensagem));
+                .orElseGet(() -> {
+                    log.info("Conta [{}] não encontrada. Criando nova conta...", idConta);
+                    return criarConta(mensagem);
+                });
 
         OffsetDateTime dataTransacao = converterTimestamp(mensagem.getTransacao().getTimestamp());
+
+        log.info("Atualizando saldo da conta [{}]. Valor: [{} {}], Tipo: [{}].",
+                idConta,
+                mensagem.getTransacao().getValor(),
+                mensagem.getTransacao().getMoeda(),
+                mensagem.getTransacao().getTipo());
 
         conta.atualizarSaldo(
                 mensagem.getConta().getSaldo().getValor(),
