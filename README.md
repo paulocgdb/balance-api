@@ -1,4 +1,4 @@
-# Balance API - Teste Técnico
+# Balance API
 
 Este projeto é uma API REST desenvolvida em Java com Spring Boot para processamento de transações financeiras e gestão de saldos, consumindo mensagens de uma fila SQS que foi
 dada no teste.
